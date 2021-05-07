@@ -8,10 +8,10 @@ const corsOptions = {
   origin: ['https://admin.graslawn.com', 'https://aspire-front-end.ngrok.io'],
   methods: ['GET', 'POST', 'OPTIONS'],
 }
-app.get('/', cors(corsOptions), (req, res) => {
+app.get('/', cors({origin: true}), (req, res) => {
   res.send('I am up!')
 })
-app.post('/', cors(corsOptions), (req, res) => {
+app.post('/', cors({origin: true}), (req, res) => {
 
   const busboy = new Busboy({ headers: req.headers });
   const {
