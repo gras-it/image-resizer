@@ -1,10 +1,17 @@
 const express = require('express')
+var cors = require('cors')
 const app = express()
 const port = process.env.PORT || 3010
 const Busboy = require('busboy');
 const resizer = require('./resize')
-
-app.post('/', (req, res) => {
+const corsOptions = {
+  origin: ['https://admin.graslawn.com', 'https://aspire-front-end.ngrok.io/'],
+  methods: ['GET', 'POST'],
+}
+app.get('/', cors(corsOptions), (req, res) => {
+  res.send('I am up!')
+})
+app.post('/', cors(corsOptions), (req, res) => {
 
   const busboy = new Busboy({ headers: req.headers });
   const {
