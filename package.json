@@ -9,7 +9,7 @@
     "sharp": "^0.28.1"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node ./src/index.js"
   },
   "engines": {
     "node": "15.11.0"
