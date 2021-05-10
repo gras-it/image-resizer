@@ -5,8 +5,7 @@ const sharp = require('sharp')
 
 const port = process.env.PORT || 3010
 const Busboy = require('busboy');
-const resize = require('./resize')
-// const resizer = require('./resize')
+
 const corsOptions = {
   origin: ['https://admin.graslawn.com', 'https://aspire-front-end.ngrok.io'],
   methods: ['GET', 'POST', 'OPTIONS'],
@@ -79,7 +78,7 @@ const resizer = ({
       })).pipe(res)
     });
     busboy.on('field', () => null);
-    busboy.on('finish', () => null));
+    busboy.on('finish', () => null);
     req.pipe(busboy);
   })
   
