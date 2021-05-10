@@ -10,7 +10,8 @@
     "sharp": "^0.28.1"
   },
   "scripts": {
-    "start": "node ./src/index.js"
+    "start": "node ./src/index.js",
+    "dev": "nodemon ./src/index.js"
   },
   "engines": {
     "node": "15.11.0"
