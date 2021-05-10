@@ -30,14 +30,14 @@ const resizer = ({
     .resize({ width: maxWidth })
     .composite([{
       input: logo,
-      top: ((maxWidth / width) * height) - 38,
-      left: 17
+      top: ((maxWidth / width) * height) - 78,
+      left: 20
     }])
     .extend({
-      top: 7,
-      bottom: 7,
-      left: 7,
-      right: 7,
+      top: 10,
+      bottom: 10,
+      left: 10,
+      right: 10,
       background: { r: 0, g: 52, b: 77, alpha: 1 }
     })
     .jpeg({
@@ -50,7 +50,7 @@ const resizer = ({
 
 ;(async () => {
   const logo = await sharp('logo.png').resize({
-    width: 50,
+    width: 100,
   }).toBuffer()
   app.get('/', cors(corsOptions), (req, res) => {
     res.send('I am up!')
