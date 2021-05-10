@@ -65,7 +65,7 @@ const resizer = ({
       height,
       maxWidth
     } = req.query
-    busboy.on('file', file => {
+    busboy.on('file', (_, file) => {
       file.on('data', () => null)
       file.pipe(resizer({
         rotate: Number(rotate),
@@ -76,6 +76,7 @@ const resizer = ({
         maxWidth: Number(maxWidth),
         logo
       })).pipe(res)
+
     });
     busboy.on('field', () => null);
     busboy.on('finish', () => null);
