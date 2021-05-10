@@ -30,7 +30,7 @@ const resizer = ({
     .resize({ width: maxWidth })
     .composite([{
       input: logo,
-      top: ((maxWidth / width) * height) - 78,
+      top: Math.round(((maxWidth / width) * height) - 78),
       left: 20
     }])
     .extend({
