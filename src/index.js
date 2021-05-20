@@ -73,7 +73,7 @@ const resizer = ({
     } = req.query
     busboy.on('file', (_, file) => {
       file.on('data', () => null)
-      file.pipe(resizer({
+      const resizerStream = file.pipe(resizer({
         rotate: Number(rotate),
         left: Number(left),
         top: Number(top),
@@ -81,7 +81,12 @@ const resizer = ({
         height: Number(height),
         maxWidth: Number(maxWidth),
         logo
-      })).pipe(res)
+      }))
+      resizerStream
+      .on('error', (e) => {
+        console.log('error', e)
+      })
+      .pipe(res)
 
     });
     busboy.on('field', () => null);
