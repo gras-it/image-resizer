@@ -19,6 +19,12 @@ const resizer = ({
   maxWidth,
   logo
 }) => {
+  console.log(rotate,
+  left,
+  top,
+  width,
+  height,
+  maxWidth)
   return sharp()
     .rotate(rotate)
     .extract({
