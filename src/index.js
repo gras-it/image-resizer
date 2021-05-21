@@ -72,22 +72,22 @@ const resizer = ({
       maxWidth
     } = req.query
     busboy.on('file', (_, file) => {
-      file.on('data', () => null)
-      const resizerStream = file.pipe(resizer({
-        rotate: Number(rotate),
-        left: Number(left),
-        top: Number(top),
-        width: Number(width),
-        height: Number(height),
-        maxWidth: Number(maxWidth),
-        logo
-      }))
-      resizerStream
-      .on('error', (e) => {
-        console.log('error', e)
-      })
-      .pipe(res)
-
+      try {
+        file.on('data', () => null)
+        file.pipe(resizer({
+          rotate: Number(rotate),
+          left: Number(left),
+          top: Number(top),
+          width: Number(width),
+          height: Number(height),
+          maxWidth: Number(maxWidth),
+          logo
+        })).pipe(res)
+      } catch (error) {
+        console.log('catch caught', error)
+        res.sendStatus(500)
+      }
+      
     });
     busboy.on('field', () => null);
     busboy.on('finish', () => null);
