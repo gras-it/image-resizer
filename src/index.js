@@ -29,7 +29,7 @@ const corsOptions = {
   });
   app.post("/", cors(corsOptions), (req, res) => {
     const busboy = Busboy({ headers: req.headers });
-    const { rotate, left, top, width, height, maxWidth, noLogo = false } = req.query;
+    const { rotate, left, top, width, height, maxWidth, noLogo = false, maxDimension } = req.query;
     res.set("Content-Type", "image/jpeg"); // Change to the appropriate MIME type
     busboy.on("file", (_, file) => {
       try {
@@ -44,6 +44,7 @@ const corsOptions = {
               height: Number(height),
               maxWidth: Number(maxWidth),
               logo: noLogo ? undefined : logo,
+              maxDimension: Number(maxDimension),
             })
           )
           .pipe(res);

@@ -1,6 +1,15 @@
 import sharp from "sharp";
 
-const resizer = ({ rotate, left, top, width, height, maxWidth, logo }) => {
+const resizer = ({
+  rotate,
+  left,
+  top,
+  width,
+  height,
+  maxWidth,
+  logo,
+  maxDimension,
+}) => {
   console.log(rotate, left, top, width, height, maxWidth);
   let sharpInstance = sharp();
   if (rotate) sharpInstance = sharpInstance.rotate(rotate);
@@ -10,8 +19,18 @@ const resizer = ({ rotate, left, top, width, height, maxWidth, logo }) => {
     width,
     height,
   });
-  if (maxWidth < width)
-    sharpInstance = sharpInstance.resize({ width: maxWidth });
+  // only works if noLogo is selected
+  if (maxDimension) {
+    const largerDimensionProp = width > height ? "width" : "height";
+    const largerDimension = largerDimensionProp === "width" ? width : height;
+    if (maxDimension > largerDimension)
+      sharpInstance = sharpInstance.resize({
+        [largerDimensionProp]: maxDimension,
+      });
+  } else {
+    if (maxWidth < width)
+      sharpInstance = sharpInstance.resize({ width: maxWidth });
+  }
   if (logo)
     sharpInstance = sharpInstance
       .composite([
