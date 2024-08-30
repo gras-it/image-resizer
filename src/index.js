@@ -1,10 +1,11 @@
-const express = require("express");
-var cors = require("cors");
+import express from "express";
+import cors from "cors";
+import sharp from "sharp";
+import Busboy from "busboy";
+import resizer from "./resizer.js";
 const app = express();
-const sharp = require("sharp");
 
 const port = process.env.PORT || 3010;
-const Busboy = require("busboy");
 const envOrigins = process.env.ORIGINS;
 const regExEnvOrigins = process.env.REGEX_ORIGINS;
 const corsOptions = {
@@ -15,37 +16,6 @@ const corsOptions = {
       : []),
   ],
   methods: ["GET", "POST", "OPTIONS"],
-};
-const resizer = ({ rotate, left, top, width, height, maxWidth, logo }) => {
-  console.log(rotate, left, top, width, height, maxWidth);
-  return sharp()
-    .rotate(rotate)
-    .extract({
-      left,
-      top,
-      width,
-      height,
-    })
-    .resize({ width: maxWidth })
-    .composite([
-      {
-        input: logo,
-        top: Math.round((maxWidth / width) * height - 78),
-        left: 20,
-      },
-    ])
-    .extend({
-      top: 10,
-      bottom: 10,
-      left: 10,
-      right: 10,
-      background: { r: 0, g: 52, b: 77, alpha: 1 },
-    })
-    .jpeg({
-      mozjpeg: true,
-      quality: 80,
-    })
-    .on("error", (e) => console.log(e));
 };
 
 (async () => {
@@ -58,8 +28,9 @@ const resizer = ({ rotate, left, top, width, height, maxWidth, logo }) => {
     res.send("I am up!");
   });
   app.post("/", cors(corsOptions), (req, res) => {
-    const busboy = new Busboy({ headers: req.headers });
-    const { rotate, left, top, width, height, maxWidth } = req.query;
+    const busboy = Busboy({ headers: req.headers });
+    const { rotate, left, top, width, height, maxWidth, noLogo = false } = req.query;
+    res.set("Content-Type", "image/jpeg"); // Change to the appropriate MIME type
     busboy.on("file", (_, file) => {
       try {
         file.on("data", () => null);
@@ -72,7 +43,7 @@ const resizer = ({ rotate, left, top, width, height, maxWidth, logo }) => {
               width: Number(width),
               height: Number(height),
               maxWidth: Number(maxWidth),
-              logo,
+              logo: noLogo ? undefined : logo,
             })
           )
           .pipe(res);
