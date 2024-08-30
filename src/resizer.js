@@ -23,7 +23,7 @@ const resizer = ({
   if (maxDimension) {
     const largerDimensionProp = width > height ? "width" : "height";
     const largerDimension = largerDimensionProp === "width" ? width : height;
-    if (maxDimension > largerDimension)
+    if (maxDimension < largerDimension)
       sharpInstance = sharpInstance.resize({
         [largerDimensionProp]: maxDimension,
       });
