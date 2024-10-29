@@ -24,6 +24,11 @@ const corsOptions = {
       width: 100,
     })
     .toBuffer();
+  const smallLogo = await sharp("logo.png")
+    .resize({
+      width: 50,
+    })
+    .toBuffer();
   app.get("/", cors(corsOptions), (req, res) => {
     res.send("I am up!");
   });
@@ -44,6 +49,7 @@ const corsOptions = {
               height: Number(height),
               maxWidth: Number(maxWidth),
               logo: noLogo ? undefined : logo,
+              smallLogo: noLogo ? undefined : smallLogo,
               maxDimension: Number(maxDimension),
             })
           )

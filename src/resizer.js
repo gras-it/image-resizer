@@ -8,6 +8,7 @@ const resizer = ({
   height,
   maxWidth,
   logo,
+  smallLogo,
   maxDimension,
 }) => {
   console.log(rotate, left, top, width, height, maxWidth);
@@ -31,22 +32,27 @@ const resizer = ({
     if (maxWidth < width)
       sharpInstance = sharpInstance.resize({ width: maxWidth });
   }
-  if (logo)
+  if (logo) {
+    const smallestborder = Math.min(height, width)
+    const useSmallLogo = smallestborder < 400
+    const borderWidth = useSmallLogo ? 5 : 10
+    const logoComposite =   {
+      input: useSmallLogo ? smallLogo : logo,
+      top: Math.round((maxWidth < width ? (maxWidth / width) : 1) * height - (useSmallLogo ? 35 : 78)),
+      left: useSmallLogo ? 10 : 20,
+    }
     sharpInstance = sharpInstance
       .composite([
-        {
-          input: logo,
-          top: Math.round((maxWidth / width) * height - 78),
-          left: 20,
-        },
+        logoComposite,
       ])
       .extend({
-        top: 10,
-        bottom: 10,
-        left: 10,
-        right: 10,
+        top: borderWidth,
+        bottom: borderWidth,
+        left: borderWidth,
+        right: borderWidth,
         background: { r: 0, g: 52, b: 77, alpha: 1 },
       });
+  }
   return sharpInstance
     .jpeg({
       mozjpeg: true,
